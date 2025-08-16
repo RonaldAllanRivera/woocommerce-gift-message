@@ -1,0 +1,5 @@
+/* Minimal styling for Gift Message field */
+.wcgm-field { margin-top: 12px; }
+.wcgm-label { display: block; margin-bottom: 6px; font-weight: 600; }
+.wcgm-input { width: 100%; max-width: 480px; }
+.wcgm-help { display: block; color: #666; margin-top: 4px; font-size: 12px; }
