@@ -106,6 +106,8 @@ Visit a product page:
 - Input: `Happy "B-Day" & 🎉`
   - Expect: Safely displayed (quotes/ampersands escaped; emoji retained where supported)
 
+<<<<<<< HEAD
+=======
 8) Assets load only on product pages
 - Visit Home/Cart/Checkout pages
   - Expect: No `wcgm-frontend` CSS/JS enqueued. On a single product page, both are enqueued.
@@ -137,6 +139,7 @@ Visit a product page:
 - Switch Site Language in Settings → General.
 - Verify strings are wrapped for translation (text domain `woocommerce-gift-message`); actual translations depend on shipping a `.pot` and language files.
 
+>>>>>>> 9eb48f8 (docs: finalize README and developer guide)
 ## Deployment Notes
 - Requires WooCommerce active before activation; otherwise the plugin deactivates itself.
 - Tested with recent WooCommerce core.
@@ -147,6 +150,12 @@ Visit a product page:
   - Keep the column hidden when not needed via Screen Options.
   - Avoid heavy work in list tables; rely on pagination and small page sizes.
 
+<<<<<<< HEAD
+## Future Improvements (Optional)
+- Screen Options toggle to enable/disable the Orders column by default.
+- Admin settings to customize label and max length without code filters.
+- Unit tests for validation and meta persistence.
+=======
 ## Improvements / Next steps (Optional)
 - AI gift message suggestions: add a “Suggest message” button (uses OpenAI). Optional setting to enable and store API key.
 - Settings: change max length and label; enable/disable the feature globally.
@@ -154,6 +163,7 @@ Visit a product page:
 - Faster Orders list: save a short order‑level summary at checkout to avoid re‑processing items.
 - Accessibility & translations: ARIA live counter; add a `.pot` file.
 - Tests & packaging: unit/E2E tests; WordPress.org `readme.txt` and screenshots.
+>>>>>>> 9eb48f8 (docs: finalize README and developer guide)
 
 ## Versioning & Changelog
 - Use semantic versioning (e.g., 1.0.0, 1.1.0)

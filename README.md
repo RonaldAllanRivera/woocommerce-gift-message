@@ -1,6 +1,6 @@
 # WooCommerce Gift Message
 
-Adds a Gift Message text field (max 150 characters) to WooCommerce product pages and persists it from cart → order → admin → emails. Includes an Orders admin column and minimal UI enhancements.
+Adds a production‑ready Gift Message experience to WooCommerce: a max‑150‑character (filterable) field on product pages with live validation, end‑to‑end persistence (cart → checkout → order → emails), HPOS/Blocks‑compatible admin listing, minimal assets, and an admin‑only REST API for headless integrations.
 
 ## Overview
 - Frontend text input on single product pages.
@@ -12,12 +12,14 @@ Adds a Gift Message text field (max 150 characters) to WooCommerce product pages
   - WooCommerce emails (order item meta)
   - WooCommerce admin → Orders list (column) and Order details (item meta)
 - Minimal CSS and a JS live character counter.
+ - Administrator-only REST API to fetch the latest order and aggregated gift messages.
 
 ## Main Files
 - `woocommerce-gift-message.php` – Plugin bootstrap, constants, activation checks.
 - `includes/class-wcgm.php` – Core functionality and all WooCommerce hooks.
 - `assets/css/frontend.css` – Minimal styling for the field.
 - `assets/js/frontend.js` – Live character counter enhancement.
+ - `includes/REST/class-wcgm-rest-orders-controller.php` – REST: `GET /wp-json/giftmessages/v1/orders` (admins only).
 
 ## Key Hooks and Flow
 - Render field: `woocommerce_before_add_to_cart_button`
@@ -27,6 +29,24 @@ Adds a Gift Message text field (max 150 characters) to WooCommerce product pages
 - Save to order items: `woocommerce_checkout_create_order_line_item`
 - Emails/admin: standard WooCommerce templates display item meta automatically.
 - Admin Orders column: supports both legacy posts table and HPOS Orders table.
+
+## REST API
+- Namespace: `giftmessages/v1`
+- Endpoint: `GET /wp-json/giftmessages/v1/orders`
+- Auth: logged-in administrators only (`current_user_can('manage_options')`). Use Application Passwords (Basic Auth) or an authenticated admin session.
+- Response:
+  - `order_id` (int)
+  - `customer_name` (string)
+  - `gift_message` (string; semicolon-separated if multiple line items have messages)
+  - `order_date` (ISO 8601 string)
+
+Example:
+```bash
+curl -X GET \
+  -H "Accept: application/json" \
+  -u "admin:APPLICATION_PASSWORD" \
+  https://your-site.example/wp-json/giftmessages/v1/orders
+```
 
 ## Security
 - Uses `wp_nonce_field()` and checks via `wp_verify_nonce()`.
@@ -67,6 +87,10 @@ Adds a Gift Message text field (max 150 characters) to WooCommerce product pages
 3. Ensure WooCommerce is active. Visit a product page to use the Gift Message field.
 
 ## Changelog
+
+### 1.1.0 — 2025-08-25
+- Add REST API endpoint: `GET /wp-json/giftmessages/v1/orders` (admin-only) to return the latest order with customer name, aggregated gift messages, and order date.
+- Update README with REST API documentation.
 
 ### 1.0.0 — 2025-08-16
 - Initial release.

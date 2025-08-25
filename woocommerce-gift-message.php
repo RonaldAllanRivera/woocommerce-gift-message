@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WooCommerce Gift Message
  * Description: Adds a Gift Message field to WooCommerce product pages and saves it through cart → order → admin → email.
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: Inspry
  * Requires at least: 5.8
  * Requires PHP: 7.4
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'WCGM_VERSION' ) ) {
-	define( 'WCGM_VERSION', '1.0.0' );
+	define( 'WCGM_VERSION', '1.1.0' );
 }
 
 if ( ! defined( 'WCGM_PLUGIN_FILE' ) ) {
@@ -57,9 +57,22 @@ add_action( 'admin_init', function() {
 
 // Bootstrap plugin.
 add_action( 'plugins_loaded', function() {
-	if ( ! class_exists( 'WooCommerce' ) ) {
-		return;
-	}
-	require_once WCGM_PLUGIN_DIR . 'includes/class-wcgm.php';
-	WCGM::instance();
+    if ( ! class_exists( 'WooCommerce' ) ) {
+        return;
+    }
+    require_once WCGM_PLUGIN_DIR . 'includes/class-wcgm.php';
+    WCGM::instance();
+} );
+
+// Register REST API endpoints for gift messages.
+add_action( 'rest_api_init', function() {
+    // Orders endpoint: GET /wp-json/giftmessages/v1/orders
+    $controller_file = WCGM_PLUGIN_DIR . 'includes/REST/class-wcgm-rest-orders-controller.php';
+    if ( file_exists( $controller_file ) ) {
+        require_once $controller_file;
+        if ( class_exists( 'WCGM_REST_Orders_Controller' ) ) {
+            $controller = new WCGM_REST_Orders_Controller();
+            $controller->register_routes();
+        }
+    }
 } );
